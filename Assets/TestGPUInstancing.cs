@@ -8,8 +8,6 @@ public class TestGPUInstancing : MonoBehaviour
     [SerializeField] private Mesh mesh;
     [SerializeField] private Material material;
     [SerializeField] private Vector3[] positions;
-    [SerializeField] private Vector3[] rotations;
-    [SerializeField] private Vector3[] sizes;
     [SerializeField] private Color[] colors;
 
     private GraphicsBuffer _argsBuffer;
@@ -18,14 +16,8 @@ public class TestGPUInstancing : MonoBehaviour
     private GraphicsBuffer _positionBuffer;
     private static readonly int PositionID = Shader.PropertyToID("_Positions");
 
-    private GraphicsBuffer _rotationBuffer;
-    private static readonly int RotationID = Shader.PropertyToID("_Rotations");
-
     private GraphicsBuffer _colorBuffer;
     private static readonly int ColorID = Shader.PropertyToID("_Colors");
-
-    private GraphicsBuffer _sizeBuffer;
-    private static readonly int SizeID = Shader.PropertyToID("_Sizes");
 
     private static readonly Bounds DrawBounds = new Bounds(Vector3.zero, Vector3.one * 1000);
 
@@ -46,8 +38,6 @@ public class TestGPUInstancing : MonoBehaviour
         UpdateArgs(count);
 
         UpdateColors(colors);
-        UpdateRotations(rotations);
-        UpdateSizes(sizes);
         UpdatePositions(positions);
     }
 
@@ -76,18 +66,6 @@ public class TestGPUInstancing : MonoBehaviour
         material.SetBuffer(PositionID, _positionBuffer);
     }
 
-    private void UpdateRotations(Vector3[] nextRotationList)
-    {
-        _rotationBuffer?.Release();
-        _rotationBuffer = new GraphicsBuffer(
-            GraphicsBuffer.Target.Structured,
-            nextRotationList.Length,
-            Marshal.SizeOf<Vector3>());
-    
-        _rotationBuffer.SetData(nextRotationList);
-        material.SetBuffer(RotationID, _rotationBuffer);
-    }
-    
     private void UpdateColors(Color[] nextColorList)
     {
         _colorBuffer?.Release();
@@ -100,18 +78,6 @@ public class TestGPUInstancing : MonoBehaviour
         material.SetBuffer(ColorID, _colorBuffer);
     }
     
-    private void UpdateSizes(Vector3[] nextSizeList)
-    {
-        _sizeBuffer?.Release();
-        _sizeBuffer = new GraphicsBuffer(
-            GraphicsBuffer.Target.Structured,
-            nextSizeList.Length,
-            Marshal.SizeOf<Vector3>());
-    
-        _sizeBuffer.SetData(nextSizeList);
-        material.SetBuffer(SizeID, _sizeBuffer);
-    }
-
     private void Draw()
     {
         if (_argsBuffer == null)
@@ -128,7 +94,6 @@ public class TestGPUInstancing : MonoBehaviour
     {
         _argsBuffer?.Dispose();
         _positionBuffer?.Dispose();
-        _rotationBuffer?.Dispose();
         _colorBuffer?.Dispose();
     }
 }

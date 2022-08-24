@@ -86,7 +86,6 @@ float4x4 eulerAnglesToRottationMatrix(float3 angles)
 
 
 StructuredBuffer<float3> _Positions;
-StructuredBuffer<float3> _Rotations;
 StructuredBuffer<half4> _Colors;
 
 void InitializeInputData(Varyings input, half3 normalTS, out InputData inputData)
@@ -159,10 +158,7 @@ Varyings LitPassVertex(Attributes input, const uint instanceID : SV_InstanceID)
     Varyings output = (Varyings)0;
 
     //追加分
-    float3 xyz = input.positionOS.xyz;
-    xyz = mul(eulerAnglesToRottationMatrix(_Rotations[instanceID]), float4(xyz, 1.0f)).xyz;
-
-    float3 pos = xyz * 1 + _Positions[instanceID];
+    float3 pos = input.positionOS.xyz + _Positions[instanceID];
     output.positionCS = mul(UNITY_MATRIX_VP, float4(pos, 1.0));
     output.instanceID = instanceID;
     //追加分終わり
@@ -176,9 +172,6 @@ Varyings LitPassVertex(Attributes input, const uint instanceID : SV_InstanceID)
     // normalWS and tangentWS already normalize.
     // this is required to avoid skewing the direction during interpolation
     // also required for per-vertex lighting and SH evaluation
-
-    // 追加分
-    input.normalOS = mul(eulerAnglesToRottationMatrix(_Rotations[instanceID]), float4(input.normalOS,1.0f)).xyz;
 
     VertexNormalInputs normalInput = GetVertexNormalInputs(input.normalOS, input.tangentOS);
 
@@ -251,6 +244,7 @@ half4 LitPassFragment(Varyings input) : SV_Target
 
     SurfaceData surfaceData;
     InitializeStandardLitSurfaceData(input.uv, surfaceData);
+    surfaceData.albedo = _Colors[input.instanceID];
 
     InputData inputData;
     InitializeInputData(input, surfaceData.normalTS, inputData);
@@ -260,16 +254,10 @@ half4 LitPassFragment(Varyings input) : SV_Target
     ApplyDecalToSurfaceData(input.positionCS, surfaceData, inputData);
     #endif
 
-    //追加分
-    inputData.shadowCoord *= 0;
-
     half4 color = UniversalFragmentPBR(inputData, surfaceData);
 
     color.rgb = MixFog(color.rgb, inputData.fogCoord);
     color.a = OutputAlpha(color.a, _Surface);
-
-    //追加分
-    color *= _Colors[input.instanceID];
 
     return color;
 }

@@ -150,7 +150,6 @@ Shader "GPUInstancingLit"
             #pragma vertex LitPassVertex
             #pragma fragment LitPassFragment
             #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
-
             // #include "Packages/com.unity.render-pipelines.universal/Shaders/LitForwardPass.hlsl"
             #include "Assets/Materials/LitForwardPass.hlsl"
             ENDHLSL
@@ -193,8 +192,7 @@ Shader "GPUInstancingLit"
             #pragma fragment ShadowPassFragment
 
             #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
-            //   #include "Packages/com.unity.render-pipelines.universal/Shaders/ShadowCasterPass.hlsl"
-            #include "Assets/Materials/ShadowCasterPass.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/ShadowCasterPass.hlsl"
             ENDHLSL
         }
 
@@ -265,7 +263,6 @@ Shader "GPUInstancingLit"
 
             #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/Shaders/LitGBufferPass.hlsl"
-            //#include "Assets/Materials/LitGBufferPass.hlsl"
             ENDHLSL
         }
 
@@ -521,8 +518,7 @@ Shader "GPUInstancingLit"
             #pragma fragment ShadowPassFragment
 
             #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
-            //    #include "Packages/com.unity.render-pipelines.universal/Shaders/ShadowCasterPass.hlsl"
-            #include "Assets/Materials/ShadowCasterPass.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/ShadowCasterPass.hlsl"
             ENDHLSL
         }
 
