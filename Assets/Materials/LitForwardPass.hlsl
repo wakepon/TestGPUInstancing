@@ -86,7 +86,7 @@ float4x4 eulerAnglesToRottationMatrix(float3 angles)
 
 
 StructuredBuffer<float3> _Positions;
-StructuredBuffer<half4> _Colors;
+StructuredBuffer<float4> _Colors;
 
 void InitializeInputData(Varyings input, half3 normalTS, out InputData inputData)
 {
